@@ -1,0 +1,67 @@
+name: unamilodge-app
+domains:
+- domain: app.unamilodge.org
+  type: PRIMARY
+  zone: unamilodge.org
+- domain: app.unamilodge.com
+  type: ALIAS
+  zone: unamilodge.com
+ingress:
+  rules:
+  - component:
+      name: production
+    match:
+      path:
+        prefix: /
+  - component:
+      name: development
+    match:
+      path:
+        prefix: /dev/
+  - match:
+      path:
+        prefix: /tradingpost
+    redirect:
+      authority: unami-lodge-one.square.site
+      redirect_code: 302
+      uri: /
+static_sites:
+- name: production
+  catchall_document: 404.html
+  dockerfile_path: dockerfile.do
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: colbsa/app.UnamiLodge.org
+  output_dir: /srv/jekyll/_site
+  source_dir: /
+  envs:
+  - key: JEKYLL_ENV
+    scope: BUILD_TIME
+    value: production
+  - key: JEKYLL_BASEURL
+    scope: BUILD_TIME
+    value: https://app.unamilodge.org
+- name: development
+  catchall_document: 404.html
+  dockerfile_path: dockerfile.do
+  github:
+    branch: development
+    deploy_on_push: true
+    repo: colbsa/app.UnamiLodge.org
+  output_dir: /srv/jekyll/_site
+  source_dir: /
+  envs:
+  - key: JEKYLL_ENV
+    scope: BUILD_TIME
+    value: development
+  - key: JEKYLL_BASEURL
+    scope: BUILD_TIME
+    value: https://app.unamilodge.org/dev
+features:
+- buildpack-stack=ubuntu-22
+region: nyc
+alerts:
+- rule: DEPLOYMENT_STARTED
+- rule: DEPLOYMENT_LIVE
+- rule: DEPLOYMENT_FAILED
