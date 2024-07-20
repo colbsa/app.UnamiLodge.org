@@ -108,4 +108,5 @@ Absolutely!  Please do not hesitate to reach out to communications@unamilodge.or
   </tr>
 </table>
 
-Website Last Published: {{ site.time | date: "%Y-%m-%d %H:%M" }} UTC
+Website Last Published: {{ site.time | date: "%Y-%m-%d %H:%M" }} UTC  
+Environment: {{ jekyll.environment }}
