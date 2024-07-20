@@ -44,3 +44,6 @@ RUN set -eux; \
 EXPOSE 4000
 ENTRYPOINT ["bundler", "exec", "jekyll"]
 CMD ["--version"]
+
+COPY . /srv/jekyll
+RUN jekyll build -b ${JEKYLL_BASEURL}
